@@ -72,7 +72,7 @@ case $choice in
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
     then 
-    apt-get install isc-dhchp-relay -y
+    apt-get install isc-dhcp-relay -y
     echo "DHCP Relay is ready to use"
     fi
     ;; 
