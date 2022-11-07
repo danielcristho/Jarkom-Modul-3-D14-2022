@@ -10,11 +10,12 @@ echo " 2.  Upgrade machine                                             ";
 echo " 3.  Install Bind9                                               ";
 echo " 4.  Install dependencies                                        ";
 echo " 5.  Install DHCP-Server                                         ";
-echo " 6.  Install Apache2                                             ";
-echo " 7.  Install PHP                                                 ";
-echo " 8.  Set up iptables                                             ";
-echo " 9.  Restart machine                                             ";
-echo " 10. Set resolv.conf                                             ";
+echo " 6.  Install DHCP-Relay                                          ";
+echo " 7.  Install Apache2                                             ";
+echo " 8.  Install PHP                                                 ";
+echo " 9.  Set up iptables                                             ";
+echo " 10. Restart machine                                             ";
+echo " 11. Set resolv.conf                                             ";
 echo " 0.  Exit                                                        ";
 echo "=================================================================";
 
@@ -65,9 +66,18 @@ case $choice in
     apt-get install isc-dhchp-server -y
     echo "DHCP is ready to use"
     fi
+    ;;
+
+6)  read -p "You want install DHCP-Relay? y/n : " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Nn]$ ]]
+    then 
+    apt-get install isc-dhchp-relay -y
+    echo "DHCP Relay is ready to use"
+    fi
     ;; 
 
-6)  read -p "You want install Apache? y/n : " -n 1 -r
+7)  read -p "You want install Apache? y/n : " -n 1 -r
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
     then 
@@ -77,7 +87,7 @@ case $choice in
     ;; 
 
 
-7)  read -p "You want install PHP? y/n : " -n 1 -r
+8)  read -p "You want install PHP? y/n : " -n 1 -r
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
     then
@@ -88,7 +98,7 @@ case $choice in
     ;;
 
 
-8)  read -p "You want set up iptables? y/n : " -n 1 -r
+9)  read -p "You want set up iptables? y/n : " -n 1 -r
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
     then 
@@ -97,7 +107,7 @@ case $choice in
     fi
     ;;
 
-9) read -p "You want restart this machine? y/n :" -n 1 -r
+10) read -p "You want restart this machine? y/n :" -n 1 -r
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
     then 
@@ -105,7 +115,7 @@ case $choice in
     fi
     ;;
 
-10) read -p "You want resolv.conf? y/n :" -n 1 -r
+11) read -p "You want resolv.conf? y/n :" -n 1 -r
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
     then 
