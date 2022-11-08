@@ -86,7 +86,7 @@ EOF
     service isc-dhcp-relay start
     service isc-dhcp-relay restart
     echo "Enable IP forward"
-    echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.conf
+    echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
     cat /proc/sys/net/ipv4/ip_forward
     echo "Done..."
     fi
@@ -128,7 +128,7 @@ EOF
     service isc-dhcp-server start
     service isc-dhcp-server restart
     echo "Enable IP forward"
-    echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.conf
+    echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
     cat /proc/sys/net/ipv4/ip_forward
     echo "Done..."
     fi
