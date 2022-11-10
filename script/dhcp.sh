@@ -120,7 +120,7 @@ subnet 192.192.3.0 netmask 255.255.255.0 {
     max-lease-time 6900;
 }
 host Eden {
-    hardware ethernet 6a:47:2a:30:f5:e2 ;
+    hardware ethernet 7a:55:19:97:68:d9 ;
     fixed-address 192.192.3.13;
 }
 
