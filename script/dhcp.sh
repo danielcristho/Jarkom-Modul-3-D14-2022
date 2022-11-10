@@ -86,7 +86,7 @@ EOF
     service isc-dhcp-relay start
     service isc-dhcp-relay restart
     echo "Enable IP forward"
-    echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
+    echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
     cat /proc/sys/net/ipv4/ip_forward
     echo "Done..."
     fi
@@ -97,26 +97,27 @@ EOF
     else
     echo "Create new DHCP-Server"
     service isc-dhcp-server stop
-    cat > /etc/dhcp/dhchp.conf- <<- EOF
-    subnet 192.192.2.0 netmask 255.255.255.0 {
-}
+    cat > /etc/dhcp/dhcpd.conf <<- EOF
+
 subnet 192.192.1.0 netmask 255.255.255.0 {
     range 192.192.1.50 192.192.1.88;
     range 192.192.1.120 192.192.1.155;
     option routers 192.192.1.1;
     option broadcast-address 192.192.1.255;
-    option domain-name-servers 192.192.1.1;
-    default-lease-time 360;
-    max-lease-time 7200;
+    option domain-name-servers 192.192.2.2;
+    default-lease-time 300;
+    max-lease-time 6900;
+}
+subnet 192.192.2.0 netmask 255.255.255.0 {
 }
 subnet 192.192.3.0 netmask 255.255.255.0 {
     range 192.192.3.10 192.192.3.30;
     range 192.192.3.60 192.192.3.85;
     option routers 192.192.3.1;
     option broadcast-address 192.192.3.255;
-    option domain-name-servers 192.192.3.2;
-    default-lease-time 720;
-    max-lease-time 7200;
+    option domain-name-servers 192.192.2.2;
+    default-lease-time 600;
+    max-lease-time 6900;
 }
 host Eden {
     hardware ethernet 6a:47:2a:30:f5:e2 ;
@@ -124,11 +125,15 @@ host Eden {
 }
 
 EOF
+
     cat /etc/dhcp/dhcpd.conf
+    echo "Replace new interface"
+    cd /etc/default
+    sed -i 's/INTERFACES=""/INTERFACES="eth0"/gI' isc-dhcp-server
     service isc-dhcp-server start
     service isc-dhcp-server restart
     echo "Enable IP forward"
-    echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
+    echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
     cat /proc/sys/net/ipv4/ip_forward
     echo "Done..."
     fi
