@@ -51,7 +51,7 @@ iface eth0 inet static
 	address 192.192.2.3
 	netmask 255.255.255.0
 	gateway 192.192.2.1
-
+	up echo nameserver 192.168.122.1 > /etc/resolv.conf
 ```
 
 * Wise (DNS Server)
@@ -63,7 +63,7 @@ iface eth0 inet static
 	address 192.192.2.2
 	netmask 255.255.255.0
 	gateway 192.192.2.1
-
+	up echo nameserver 192.168.122.1 > /etc/resolv.conf
 ```
 
 * Berlint (Proxy Server)
@@ -74,6 +74,25 @@ iface eth0 inet static
 	address 192.192.2.4
 	netmask 255.255.255.0
 	gateway 192.192.2.1
+    up echo nameserver 192.168.122.1 > /etc/resolv.conf
 
 
+```
+
+Untuk akses internet, tambahkan konfigurasi nameserver di **/etc/resolv.conf** dan juga konfiogurasi **iptables** pada router Ostania agar node-node yang terhubung bisa mengakses internet juga.
+
+```
+
+echo "nameserver 192.168.122.1" >> /etc/resolv.conf
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.192.0.0/16
+
+```
+
+Instalasi
+
+* Ostania
+
+```
+apt update
+apt-get install isc-dhcp-relay -y
 ```
