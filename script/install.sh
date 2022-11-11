@@ -19,7 +19,7 @@ echo " 11. Set resolv.conf                                             ";
 echo " 0.  Exit                                                        ";
 echo "=================================================================";
 
-read -p " Enter Your Choice [0 - 1] : " choice;
+read -p " Enter Your Choice [0 - 11] : " choice;
 echo "";
 case $choice in
 

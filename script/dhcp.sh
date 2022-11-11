@@ -16,7 +16,7 @@ echo " 8. Remove DHCP-Server                                           ";
 echo " 0. Exit                                                         ";
 echo "=================================================================";
 
-read -p " Enter Your Choice [0 - 9] : " choice;
+read -p " Enter Your Choice [0 - 8] : " choice;
 echo "";
 case $choice in
 
