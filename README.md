@@ -75,8 +75,6 @@ iface eth0 inet static
 	netmask 255.255.255.0
 	gateway 192.192.2.1
     up echo nameserver 192.168.122.1 > /etc/resolv.conf
-
-
 ```
 
 Untuk akses internet, tambahkan konfigurasi nameserver di **/etc/resolv.conf** dan juga konfiogurasi **iptables** pada router Ostania agar node-node yang terhubung bisa mengakses internet juga.
