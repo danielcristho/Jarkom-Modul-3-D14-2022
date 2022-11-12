@@ -6,7 +6,7 @@ Lapres Praktikum Jarkom Modul 3 Kelompok D-14
 |---------------------------|----------|
 |Gloriyano C. Daniel Pepuho |5025201121|
 
-![Topology](topology.png)
+![Topology](img/topology.png)
 
 ## Cara Pengerjaan
 
