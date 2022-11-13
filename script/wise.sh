@@ -1,11 +1,12 @@
 #!/bin/bash
 
 #CONSTANT
-SERVER_ADDR="192.192.2.2"
-DOMAIN_NAME="wise.D14.com"
-FORWARD_FILE="forward"
-REVERSE_FILE="reverse"
-RESOLV_ADDR="2.192.192"
+SERVER_ADDR="192.192.2.253"
+SERVER_ADDR1="192.192.2.254"
+DOMAIN_NAME="loid-work.com"
+DOMAIN_NAME1="franky-work.com"
+FORWARD_FILE=$DOMAIN_NAME
+FORWARD_FILE1=$DOMAIN_NAME1
 
 again='y'
 while [[ $again == 'Y' ]] || [[ $again == 'y' ]];
@@ -15,9 +16,9 @@ echo "=================================================================";
 echo " 1. Update machine                                               ";
 echo " 2. Upgrade machine                                              ";
 echo " 3. Install bind9                                                ";
-echo " 4. Create new zone (forward zone&reverse zone)                  ";
-echo " 5. Configure forward zone                                       ";
-echo " 6. Configure reverse zone                                       ";
+echo " 4. Create new zone (loid&franky)                                ";
+echo " 5. Configure loid zone                                          ";
+echo " 6. Configure franky zone                                        ";
 echo " 7. Configure named.conf.options                                 ";
 echo " 8. Configure resolv.conf                                        ";
 echo " 9. Remove bind9                                                 ";
@@ -68,16 +69,17 @@ zone "${DOMAIN_NAME}" {
         type master;
         file "/etc/bind/wise/${FORWARD_FILE}";
 };
-# zone "${RESOLV_ADDR}.in-addr.arpa" {
-#         type master;
-#         file "/etc/bind/wise/${REVERSE_FILE}";
-# };
+zone "${DOMAIN_NAME1}" {
+        type master;
+        file "/etc/bind/wise/${FORWARD_FILE1}";
+};
 EOF
     cat /etc/bind/named.conf.local
 
     echo "Create new forward and reverse file"
     cd /etc/bind && mkdir wise
     cp db.local wise/${FORWARD_FILE}
+    cp db.local wise/${FORWARD_FILE1}
     # cp db.local wise/${REVERSE_FILE}
     echo "Done..."
     fi
@@ -93,9 +95,7 @@ EOF
     sed -i "s/127.0.0.1/${SERVER_ADDR}/gI" ${FORWARD_FILE}
     echo "Adding new record..."
     cat >> /etc/bind/wise/${FORWARD_FILE} <<- EOF
-@     IN     NS       $SERVER_ADDR
-www     IN      CNAME       $SERVER_ADDR
-@       IN      NS      $DOMAIN_NAME.
+www     IN      CNAME   $SERVER_ADDR
 
 EOF
     cat /etc/bind/wise/${FORWARD_FILE}
@@ -103,21 +103,21 @@ EOF
     fi
     ;;
 
-6)  if [ -z "$(ls -A /etc/bind/wise/${REVERSE_FILE})" ]; then
+6) if [ -z "$(ls -A /etc/bind/wise/${FORWARD_FILE1})" ]; then
     echo "File not found!!"
     else
     cd /etc/bind/wise
     echo "Replace all localhost string with domain name..."
-    sed -i "s/localhost/${DOMAIN_NAME}/gI" ${REVERSE_FILE}
+    sed -i "s/localhost/${DOMAIN_NAME1}/gI" ${FORWARD_FILE1}
+    echo "Replace 127.0.0.1 with server address..."
+    sed -i "s/127.0.0.1/${SERVER_ADDR1}/gI" ${FORWARD_FILE1}
     echo "Adding new record..."
-    cat >> /etc/bind/${REVERSE_FILE} <<- EOF
-3.192.192.in-addr.arpa.       IN        NS         $DOMAIN_NAME.
-2      IN       PTR         $DOMAIN_NAME.
+    cat >> /etc/bind/wise/${FORWARD_FILE1} <<- EOF
+www     IN      CNAME   $SERVER_ADDR1
 
 EOF
-    cat /etc/bind/${REVERSE_FILE}
-    service bind9 restart
-    echo "Configurations is succes..."
+    cat /etc/bind/wise/${FORWARD_FILE}
+    echo "Done..."
     fi
     ;;
 

@@ -272,4 +272,8 @@ iface eth0 inet dhcp
 
 ![Testing](img/testing-dhcp.png)
 
+### Nomor 8
+SSS, Garden, dan Eden digunakan sebagai client Proxy agar pertukaran informasi dapat terjamin keamanannya, juga untuk mencegah kebocoran data.
+Pada Proxy Server di Berlint, Loid berencana untuk mengatur bagaimana Client dapat mengakses internet. Artinya setiap client harus menggunakan Berlint sebagai HTTP & HTTPS proxy.
+
 
