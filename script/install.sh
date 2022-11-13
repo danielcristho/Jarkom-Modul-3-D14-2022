@@ -26,7 +26,8 @@ case $choice in
 1)  read -p "You will update this machine? y/n : " -n 1 -r
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
-    then 
+    then
+    echo "nameserver 192.168.122.1" > /etc/resolv/conf
     apt-get update -y
     echo "Update success"
     fi

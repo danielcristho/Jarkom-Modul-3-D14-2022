@@ -64,7 +64,7 @@ case $choice in
     echo "Create new relay"
     service isc-dhcp-relay stop
     cat > /etc/default/isc-dhcp-relay <<- EOF
-    # Defaults for isc-dhcp-relay initscript
+# Defaults for isc-dhcp-relay initscript
 # sourced by /etc/init.d/isc-dhcp-relay
 # installed at /etc/default/isc-dhcp-relay by the maintainer scripts
 
