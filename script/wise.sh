@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #CONSTANT
-SERVER_ADDR="192.192.2.253"
-SERVER_ADDR1="192.192.2.254"
+SERVER_ADDR="192.192.2.2"
+SERVER_ADDR1="192.192.2.4"
 DOMAIN_NAME="loid-work.com"
 DOMAIN_NAME1="franky-work.com"
 FORWARD_FILE=$DOMAIN_NAME
@@ -95,10 +95,11 @@ EOF
     sed -i "s/127.0.0.1/${SERVER_ADDR}/gI" ${FORWARD_FILE}
     echo "Adding new record..."
     cat >> /etc/bind/wise/${FORWARD_FILE} <<- EOF
-www     IN      CNAME   $SERVER_ADDR
+www     IN      CNAME   $DOMAIN_NAME
 
 EOF
     cat /etc/bind/wise/${FORWARD_FILE}
+    service bind9 restart
     echo "Done..."
     fi
     ;;
@@ -113,10 +114,11 @@ EOF
     sed -i "s/127.0.0.1/${SERVER_ADDR1}/gI" ${FORWARD_FILE1}
     echo "Adding new record..."
     cat >> /etc/bind/wise/${FORWARD_FILE1} <<- EOF
-www     IN      CNAME   $SERVER_ADDR1
+www     IN      CNAME   $DOMAIN_NAME1
 
 EOF
-    cat /etc/bind/wise/${FORWARD_FILE}
+    cat /etc/bind/wise/${FORWARD_FILE1}
+    service bind9 restart
     echo "Done..."
     fi
     ;;

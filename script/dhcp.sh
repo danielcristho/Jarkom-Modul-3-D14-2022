@@ -23,7 +23,7 @@ case $choice in
 1)  read -p "You will update and install many dependencies? y/n : " -n 1 -r
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
-    then 
+    then
     apt update -y
     apt-get install net-tools -y
     apt-get install lynx dnsutils -y
