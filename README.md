@@ -276,4 +276,133 @@ iface eth0 inet dhcp
 SSS, Garden, dan Eden digunakan sebagai client Proxy agar pertukaran informasi dapat terjamin keamanannya, juga untuk mencegah kebocoran data.
 Pada Proxy Server di Berlint, Loid berencana untuk mengatur bagaimana Client dapat mengakses internet. Artinya setiap client harus menggunakan Berlint sebagai HTTP & HTTPS proxy.
 
+* Berlint, pastikan squid telah terinstal kemudian tambahkan baris perintah ini di **/etc/squid/squid.conf**. Dimana proxy servernya akan berjalan di port 6000
 
+```
+
+http_port 6000
+visible_hostname Berlint
+
+```
+
+* Client, export http_proxy supaya proxy servernya bisa digunakan oleh client.
+
+```
+
+export htpp_proxy="http://192.192.2.4:6000"
+
+```
+
+Untuk melihat hasil exportnya, bisa dipanggil variabelnya menggunakan echo
+
+```
+
+echo $http_proxy
+
+```
+
+
+### Nomor 9
+Pada Proxy Server di Berlint, Loid berencana untuk mengatur bagaimana Client dapat mengakses internet. Artinya setiap client harus menggunakan Berlint sebagai HTTP & HTTPS proxy. Adapun kriteria pengaturannya adalah sebagai berikut:
+- Client hanya dapat mengakses internet diluar (selain) hari & jam kerja (senin-jumat 08.00 - 17.00) dan hari libur (dapat mengakses 24 jam penuh)
+
+    * Kemudian masih di direktori **/etc/squid**, buat lagi file dengan nama acl.conf. Isinya yaitu hari dan jam kerja yang didefine dengan nama WORKDAYS.
+    ```
+
+    acl WORKDAYS time MTWHF 08:00-17:00
+
+    ```
+
+    * Berlint, edit lagi di **/etc/squid/squid.conf** untuk menambahkan rule baru untuk WORKDAYS dimana actionnya yaitu deny, kemudian selain jam kerja maka actionnya yaitu allow
+
+    ```
+
+    http_access deny WORKDAYS
+    http_access allow all
+
+    ```
+
+- Adapun pada hari dan jam kerja sesuai nomor (1), client hanya dapat mengakses domain loid-work.com dan franky-work.com (IP tujuan domain dibebaskan)
+
+    * WISE, pastikan bind9 sudah terinstal, kemudian edit **named.conf.local** di **/etc/bind**. Tambahkan new zone
+
+    ```
+    zone "loid-work.com" {
+        type master;
+        file "/etc/bind/wise/loid-work.com";
+    };
+    zone "franky-work.com" {
+        type master;
+        file "/etc/bind/wise/franky-work.com";
+    };
+    ```
+
+    Kemudian buat direktori baru di **/etc/bind** dengan nama wise. lalu copy db.local ke folder wise dan sesuaikan nama filenya dengan yang ada di file **named.conf.local**
+
+    * loid-work.com
+
+    ```
+    ;
+    ; BIND data file for local loopback interface
+    ;
+    $TTL    604800
+    @       IN      SOA     loid-work.com. root.loid-work.com. (
+                                2         ; Serial
+                            604800         ; Refresh
+                            86400         ; Retry
+                            2419200         ; Expire
+                            604800 )       ; Negative Cache TTL
+    ;
+    @       IN      NS      loid-work.com.
+    @       IN      A       192.192.2.2
+    @       IN      AAAA    ::1
+    www     IN      CNAME   loid-work.com.
+
+    ```
+
+    * franky-loid.com
+
+    ```
+
+    ;
+    ; BIND data file for local loopback interface
+    ;
+    $TTL    604800
+    @       IN      SOA     franky-work.com. root.franky-work.com. (
+                                2         ; Serial
+                            604800         ; Refresh
+                            86400         ; Retry
+                            2419200         ; Expire
+                            604800 )       ; Negative Cache TTL
+    ;
+    @       IN      NS      franky-work.com.
+    @       IN      A       192.192.2.2
+    @       IN      AAAA    ::1
+    www     IN      CNAME   franky-work.com.
+
+    ```
+    
+    * Berlint, buat list dns dengan nama sites.txt di **/etc/squid**. Kemudain edit lagi di squid.conf
+
+    ```
+    
+    acl SITES dstdomain "/etc/squid/sites.txt"
+    http_access allow WORKDAYS SITES
+    
+    ```
+
+- Saat akses internet dibuka, client dilarang untuk mengakses web tanpa HTTPS. (Contoh web HTTP: http://example.com)
+
+* Ostania, edit **/etc/squid/squid.conf**
+
+```
+acl SSL_PORT port 443
+
+
+http_access allow SSL_PORT
+http_access allow all
+```
+
+- Agar menghemat penggunaan, akses internet dibatasi dengan kecepatan maksimum 128 Kbps pada setiap host (Kbps = kilobit per second; lakukan pengecekan pada tiap host, ketika 2 host akses internet pada saat bersamaan, keduanya mendapatkan speed maksimal yaitu 128 Kbps)
+
+- Setelah diterapkan, ternyata peraturan nomor (4) mengganggu produktifitas saat hari kerja, dengan demikian pembatasan kecepatan hanya diberlakukan untuk pengaksesan internet pada hari libur

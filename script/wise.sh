@@ -2,7 +2,6 @@
 
 #CONSTANT
 SERVER_ADDR="192.192.2.2"
-SERVER_ADDR1="192.192.2.4"
 DOMAIN_NAME="loid-work.com"
 DOMAIN_NAME1="franky-work.com"
 FORWARD_FILE=$DOMAIN_NAME
@@ -111,7 +110,7 @@ EOF
     echo "Replace all localhost string with domain name..."
     sed -i "s/localhost/${DOMAIN_NAME1}/gI" ${FORWARD_FILE1}
     echo "Replace 127.0.0.1 with server address..."
-    sed -i "s/127.0.0.1/${SERVER_ADDR1}/gI" ${FORWARD_FILE1}
+    sed -i "s/127.0.0.1/${SERVER_ADDR}/gI" ${FORWARD_FILE1}
     echo "Adding new record..."
     cat >> /etc/bind/wise/${FORWARD_FILE1} <<- EOF
 www     IN      CNAME   $DOMAIN_NAME1
@@ -152,11 +151,9 @@ EOF
     then 
     echo "Edit resolv.conf"
     # sudo su
-    echo "nameserver ${SERVER_ADDR}" > /etc/resolv.conf
+    echo "nameserver 192.168.122.1" > /etc/resolv.conf
     #Comment IP Nat
-    echo "#nameserver 192.168.122.1" >> /etc/resolv.conf
     echo "DONE..."
-    echo "Try using nslookup..."
     fi
     ;;
 

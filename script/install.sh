@@ -27,7 +27,6 @@ case $choice in
     echo ""
     if [[ ! $REPLY =~ ^[Nn]$ ]]
     then
-    echo "nameserver 192.168.122.1" > /etc/resolv/conf
     apt-get update -y
     echo "Update success"
     fi
@@ -121,8 +120,7 @@ case $choice in
     if [[ ! $REPLY =~ ^[Nn]$ ]]
     then 
     #echo "nameserver 192.168.122.1" >> /etc/resolv.conf
-    echo "namserver 192.192.3.2
-nameserver 192.192.2.2" >> /etc/resolv.conf
+    echo "nameserver 192.192.2.2" >> /etc/resolv.conf
     fi
     ;;
 
