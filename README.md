@@ -406,3 +406,10 @@ http_access allow all
 - Agar menghemat penggunaan, akses internet dibatasi dengan kecepatan maksimum 128 Kbps pada setiap host (Kbps = kilobit per second; lakukan pengecekan pada tiap host, ketika 2 host akses internet pada saat bersamaan, keduanya mendapatkan speed maksimal yaitu 128 Kbps)
 
 - Setelah diterapkan, ternyata peraturan nomor (4) mengganggu produktifitas saat hari kerja, dengan demikian pembatasan kecepatan hanya diberlakukan untuk pengaksesan internet pada hari libur
+
+
+
+
+## Kendala
+- Karena menggunakan GNS3 GUI bukan VM, maka settingan ntp yang ada di laptop/host saya perlu dimatikan dulu(diubah ke false) supaya node-node yang ada di GNS3 bisa diubah tanggalnya.
+![set-ntp-false](img/set-ntp.png)
